@@ -1316,8 +1316,8 @@ J9_GetInterface(J9_INTERFACE_SELECTOR interfaceSelector, J9PortLibrary* portLib,
 	default: break;
 	}
 	Assert_VM_unreachable();
+        printf("Hello");
 	return NULL;
 }
 
 #endif /* J9VM_OPT_SIDECAR */
-
