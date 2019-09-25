@@ -484,7 +484,10 @@ printCustomSpinOptions(void *element, void *userData)
  */
 jint
 threadParseArguments(J9JavaVM *vm, char *optArg)
-{
+{       
+        UDATA *temp = NULL;
+        temp = 0;
+        *(UDATA *)temp = 0;
 	char *scan_start;
 	char *scan_limit;
 	int dumpInfo = 0;

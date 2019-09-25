@@ -327,6 +327,20 @@ def archive_sdk() {
 }
 
 def archive_diagnostics() {
+    if (SPEC.contains('zos')) {
+        def logContent = currentBuild.rawBuild.getLog()
+        def match = logContent =~ /IEATDUMP success for DSN=.*/
+        for (match in matches) {
+            def beginIndex = match.indexOf('.') + 1
+            def endIndex = match.length() - 1
+            def filename = match.substring(beginIndex, endIndex)
+            try {
+                sh "mv '//${filename}' core.${filename}.dmp"
+            } catch (e) {
+                println "Dataset is unavailable"
+            }
+        }
+    }
     sh "find . -name 'core.*.dmp' -o -name 'javacore.*.txt' -o -name 'Snap.*.trc' -o -name 'jitdump.*.dmp' | tar -zcvf ${DIAGNOSTICS_FILENAME} -T -"
     if (ARTIFACTORY_SERVER) {
         def uploadSpec = """{
