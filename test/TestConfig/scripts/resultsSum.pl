@@ -25,6 +25,9 @@ use warnings;
 use Data::Dumper;
 use File::Basename;
 use File::Path qw/make_path/;
+use FindBin;
+use lib $FindBin::Bin;
+require "moveDmp.pl";
 
 my $resultFile;
 my $failuremkarg;
@@ -35,6 +38,7 @@ my $jdkImpl = "";
 my $buildList = "";
 my $spec = "";
 my $customTarget = "";
+my $testOutputDir;
 my %spec2jenkinsFile = (
 	'linux_x86-64_cmprssptrs'      => 'openjdk_x86-64_linux',
 	'linux_x86-64'                 => 'openjdk_x86-64_linux_xl',
@@ -73,6 +77,8 @@ for (my $i = 0; $i < scalar(@ARGV); $i++) {
 		($spec) = $arg =~ /^\-\-spec=(.*)/;
 	} elsif ($arg =~ /^\-\-customTarget=/) {
 		($customTarget) = $arg =~ /^\-\-customTarget=(.*)/;
+	} elsif ($arg =~ /^\-\-testOutputDir=/) {
+		($testOutputDir) = $arg =~ /^\-\-testOutputDir=(.*)/;
 	}
 }
 
@@ -139,6 +145,10 @@ sub resultReporter {
 						$tapString .= "  ---\n";
 						if (($diagnostic eq 'failure') || ($diagnostic eq 'all')) {
 							$tapString .= $output;
+						}
+						if ($spec =~ /zos/) {
+							my $dmpDir = $testOutputDir."/".$testName;
+							moveTDUMPS($output, $dmpDir);
 						}
 					} elsif ($result eq ($testName . "_DISABLED\n")) {
 						$result =~ s/_DISABLED\n$//;

@@ -1,23 +1,15 @@
 ##############################################################################
-#  Copyright (c) 2016, 2019 IBM Corp. and others
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#  This program and the accompanying materials are made available under
-#  the terms of the Eclipse Public License 2.0 which accompanies this
-#  distribution and is available at https://www.eclipse.org/legal/epl-2.0/
-#  or the Apache License, Version 2.0 which accompanies this distribution and
-#  is available at https://www.apache.org/licenses/LICENSE-2.0.
+#      https://www.apache.org/licenses/LICENSE-2.0
 #
-#  This Source Code may also be made available under the following
-#  Secondary Licenses when the conditions for such availability set
-#  forth in the Eclipse Public License, v. 2.0 are satisfied: GNU
-#  General Public License, version 2 with the GNU Classpath
-#  Exception [1] and GNU General Public License, version 2 with the
-#  OpenJDK Assembly Exception [2].
-#
-#  [1] https://www.gnu.org/software/classpath/license.html
-#  [2] http://openjdk.java.net/legal/assembly-exception.html
-#
-#  SPDX-License-Identifier: EPL-2.0 OR Apache-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 ##############################################################################
 
 .PHONY: help rmResultFile resultsSummary
@@ -49,11 +41,11 @@ P=:
 AND_IF_SUCCESS=&&
 PROPS_DIR=props_unix
 
--include $(TEST_ROOT)$(D)TestConfig$(D)autoGenEnv.mk
-include $(TEST_ROOT)$(D)TestConfig$(D)envSettings.mk
-include $(TEST_ROOT)$(D)TestConfig$(D)utils.mk
-include $(TEST_ROOT)$(D)TestConfig$(D)testEnv.mk
-include $(TEST_ROOT)$(D)TestConfig$(D)featureSettings.mk
+-include $(TEST_ROOT)$(D)TKG$(D)autoGenEnv.mk
+include $(TEST_ROOT)$(D)TKG$(D)envSettings.mk
+include $(TEST_ROOT)$(D)TKG$(D)utils.mk
+include $(TEST_ROOT)$(D)TKG$(D)testEnv.mk
+include $(TEST_ROOT)$(D)TKG$(D)featureSettings.mk
 
 ifndef JDK_VERSION
 	export JDK_VERSION:=8
@@ -169,7 +161,7 @@ JAVA_COMMAND:=$(Q)$(TEST_JDK_HOME)$(D)bin$(D)java$(Q)
 #######################################
 LIB_DIR=$(JVM_TEST_ROOT)$(D)TestConfig$(D)lib
 TESTNG=$(LIB_DIR)$(D)testng.jar$(P)$(LIB_DIR)$(D)jcommander.jar
-RESOURCES_DIR=$(JVM_TEST_ROOT)$(D)TestConfig$(D)resources
+RESOURCES_DIR=$(JVM_TEST_ROOT)$(D)TKG$(D)resources
 
 #######################################
 # cmdlinetester jars
@@ -181,10 +173,10 @@ CMDLINETESTER_RESJAR=$(Q)$(JVM_TEST_ROOT)$(D)functional$(D)cmdline_options_testr
 # testng report dir
 #######################################
 ifndef UNIQUEID
-	GETID := $(TEST_ROOT)$(D)TestConfig$(D)scripts$(D)getUniqueId.pl
+	GETID := $(TEST_ROOT)$(D)TKG$(D)scripts$(D)getUniqueId.pl
 	export UNIQUEID := $(shell perl $(GETID) -v)
 endif
-TESTOUTPUT := $(TEST_ROOT)$(D)TestConfig$(D)test_output_$(UNIQUEID)
+TESTOUTPUT := $(TEST_ROOT)$(D)TKG$(D)test_output_$(UNIQUEID)
 ifeq ($(TEST_ITERATIONS), 1)
 	REPORTDIR_NQ = $(TESTOUTPUT)$(D)$@
 else
@@ -231,7 +223,7 @@ endif
 # include configure makefile
 #######################################
 ifndef MACHINE_MK
--include $(JVM_TEST_ROOT)$(D)TestConfig$(D)machineConfigure.mk
+-include $(JVM_TEST_ROOT)$(D)TKG$(D)machineConfigure.mk
 else
 -include $(MACHINE_MK)$(D)machineConfigure.mk
 endif
@@ -240,7 +232,7 @@ endif
 # include openj9 specific settings
 #######################################
 ifeq ($(JDK_IMPL), $(filter $(JDK_IMPL),openj9 ibm))
-	include $(TEST_ROOT)$(D)TestConfig$(D)openj9Settings.mk
+	include $(TEST_ROOT)$(D)TKG$(D)openj9Settings.mk
 endif
 
 #######################################
@@ -299,13 +291,13 @@ endif
 # Define the EXCLUDE_FILE to be used for temporarily excluding failed tests.
 # This macro is used in /test/Utils/src/org/openj9/test/util/IncludeExcludeTestAnnotationTransformer
 ifndef EXCLUDE_FILE
-	export EXCLUDE_FILE:=$(JVM_TEST_ROOT)$(D)TestConfig$(D)resources$(D)excludes$(D)$(JCL_VERSION)_exclude_$(JDK_VERSION).txt
+	export EXCLUDE_FILE:=$(TEST_ROOT)$(D)TestConfig$(D)resources$(D)excludes$(D)$(JCL_VERSION)_exclude_$(JDK_VERSION).txt
 endif
 
 #######################################
 # failed target
 #######################################
-FAILEDTARGETS = $(TEST_ROOT)$(D)TestConfig$(D)failedtargets.mk
+FAILEDTARGETS = $(TEST_ROOT)$(D)TKG$(D)failedtargets.mk
 
 #######################################
 # result Summary
@@ -321,4 +313,4 @@ rmResultFile:
 	@$(RM) $(Q)$(TEMPRESULTFILE)$(Q)
 
 resultsSummary:
-	@perl $(Q)$(TEST_ROOT)$(D)TestConfig$(D)scripts$(D)resultsSum.pl$(Q) --failuremk=$(Q)$(FAILEDTARGETS)$(Q) --resultFile=$(Q)$(TEMPRESULTFILE)$(Q) --tapFile=$(Q)$(TAPRESULTFILE)$(Q) --diagnostic=$(DIAGNOSTICLEVEL) --jdkVersion=$(JDK_VERSION) --jdkImpl=$(JDK_IMPL) --spec=$(SPEC) --buildList=$(BUILD_LIST) --customTarget=$(CUSTOM_TARGET)
+	@perl $(Q)$(TEST_ROOT)$(D)TKG$(D)scripts$(D)resultsSum.pl$(Q) --failuremk=$(Q)$(FAILEDTARGETS)$(Q) --resultFile=$(Q)$(TEMPRESULTFILE)$(Q) --tapFile=$(Q)$(TAPRESULTFILE)$(Q) --diagnostic=$(DIAGNOSTICLEVEL) --jdkVersion=$(JDK_VERSION) --jdkImpl=$(JDK_IMPL) --spec=$(SPEC) --buildList=$(BUILD_LIST) --customTarget=$(CUSTOM_TARGET)
