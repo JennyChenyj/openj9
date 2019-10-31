@@ -312,6 +312,7 @@ FAILEDTARGETS = $(TEST_ROOT)$(D)TestConfig$(D)failedtargets.mk
 #######################################
 TEMPRESULTFILE=$(TESTOUTPUT)$(D)TestTargetResult
 TAPRESULTFILE=$(TESTOUTPUT)$(D)TestTargetResult.tap
+DMP_DIRECTORY=$(TESTOUTPUT)
 
 ifndef DIAGNOSTICLEVEL
 export DIAGNOSTICLEVEL:=failure
@@ -321,4 +322,4 @@ rmResultFile:
 	@$(RM) $(Q)$(TEMPRESULTFILE)$(Q)
 
 resultsSummary:
-	@perl $(Q)$(TEST_ROOT)$(D)TestConfig$(D)scripts$(D)resultsSum.pl$(Q) --failuremk=$(Q)$(FAILEDTARGETS)$(Q) --resultFile=$(Q)$(TEMPRESULTFILE)$(Q) --tapFile=$(Q)$(TAPRESULTFILE)$(Q) --diagnostic=$(DIAGNOSTICLEVEL) --jdkVersion=$(JDK_VERSION) --jdkImpl=$(JDK_IMPL) --spec=$(SPEC) --buildList=$(BUILD_LIST) --customTarget=$(CUSTOM_TARGET)
+	@perl $(Q)$(TEST_ROOT)$(D)TestConfig$(D)scripts$(D)resultsSum.pl$(Q) --failuremk=$(Q)$(FAILEDTARGETS)$(Q) --resultFile=$(Q)$(TEMPRESULTFILE)$(Q) --tapFile=$(Q)$(TAPRESULTFILE)$(Q) --diagnostic=$(DIAGNOSTICLEVEL) --jdkVersion=$(JDK_VERSION) --jdkImpl=$(JDK_IMPL) --spec=$(SPEC) --buildList=$(BUILD_LIST) --customTarget=$(CUSTOM_TARGET) --dmpDir=${DMP_DIRECTORY}
