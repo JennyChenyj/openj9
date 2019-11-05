@@ -38,7 +38,6 @@ my $jdkImpl = "";
 my $buildList = "";
 my $spec = "";
 my $customTarget = "";
-my $dmpDir;
 my %spec2jenkinsFile = (
 	'linux_x86-64_cmprssptrs'      => 'openjdk_x86-64_linux',
 	'linux_x86-64'                 => 'openjdk_x86-64_linux_xl',
@@ -77,8 +76,6 @@ for (my $i = 0; $i < scalar(@ARGV); $i++) {
 		($spec) = $arg =~ /^\-\-spec=(.*)/;
 	} elsif ($arg =~ /^\-\-customTarget=/) {
 		($customTarget) = $arg =~ /^\-\-customTarget=(.*)/;
-	} elsif ($arg =~ /^\-\-dmpDir=/) {
-		($dmpDir) = $arg =~ /^\-\-dmpDir=(.*)/;
 	}
 }
 
@@ -146,10 +143,10 @@ sub resultReporter {
 						if (($diagnostic eq 'failure') || ($diagnostic eq 'all')) {
 							$tapString .= $output;
 						}
-					    if ($spec =~ /zos/) {
-					    	moveTDUMPS($output, $dmpDir, 1);
-					    	#moveTDUMPS($output, "/home/jenkins", 1);
-					    }
+						if ($spec =~ /zos/) {
+							my $dmpDir = dirname($resultFile).'/'.$testName;
+							moveTDUMPS($output, $dmpDir);
+						}
 					} elsif ($result eq ($testName . "_DISABLED\n")) {
 						$result =~ s/_DISABLED\n$//;
 						push (@disabled, $result);
