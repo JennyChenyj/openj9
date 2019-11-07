@@ -115,7 +115,7 @@ sub runTimedCmd {
 }
 
 sub moveTDUMPS {
-	my ($file, $moveLocation) = @_;
+	my ($file, $moveLocation) = @ARGV;
 	logMsg("Moving the TDUMPS to '$moveLocation', using log to identify the TDUMP name to be moved");
 	if ($^O ne 'os390') {
 		return;

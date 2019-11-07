@@ -78,5 +78,13 @@ getdependency:
 #######################################
 # compile all tests under $(TEST_ROOT)
 #######################################
+TESTOUTPUT := $(TEST_ROOT)$(D)TestConfig$(D)test_output_$(UNIQUEID)
 compile: getdependency
-	ant -f scripts$(D)build_test.xml -DTEST_ROOT=$(TEST_ROOT) -DBUILD_ROOT=$(BUILD_ROOT) -DJDK_VERSION=$(JDK_VERSION) -DJDK_IMPL=$(JDK_IMPL) -DJCL_VERSION=$(JCL_VERSION) -DBUILD_LIST=${BUILD_LIST} -DRESOURCES_DIR=${RESOURCES_DIR} -DPLATFORM=${PLATFORM} -DTEST_JDK_HOME=${TEST_JDK_HOME} -DJVM_VERSION=$(JVM_VERSION)
+	{ ant -f scripts$(D)build_test.xml -DTEST_ROOT=$(TEST_ROOT) -DBUILD_ROOT=$(BUILD_ROOT) -DJDK_VERSION=$(JDK_VERSION) -DJDK_IMPL=$(JDK_IMPL) -DJCL_VERSION=$(JCL_VERSION) -DBUILD_LIST=${BUILD_LIST} -DRESOURCES_DIR=${RESOURCES_DIR} -DPLATFORM=${PLATFORM} -DTEST_JDK_HOME=${TEST_JDK_HOME} -DJVM_VERSION=$(JVM_VERSION) } 2>&1 | tee -a $(Q)$(TESTOUTPUT)$(D)compilation$(D)compilation.log$(Q)
+
+#######################################
+# check if spec is zos and move dump
+#######################################
+ifneq (,$(findstring zos,$(SPEC)))
+	$(shell perl scripts$(D)getDependencies.pl '$(TESTOUTPUT)$(D)compilation$(D)compilation.log' '$(TESTOUTPUT)$(D)compilation')
+endif
