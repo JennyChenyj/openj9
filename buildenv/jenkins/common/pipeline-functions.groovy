@@ -183,7 +183,7 @@ def cancel_running_builds(JOB_NAME, BUILD_IDENTIFIER) {
 
 def build(BUILD_JOB_NAME, OPENJDK_REPO, OPENJDK_BRANCH, OPENJDK_SHA, OPENJ9_REPO, OPENJ9_BRANCH, OPENJ9_SHA, OMR_REPO, OMR_BRANCH, OMR_SHA, VARIABLE_FILE, VENDOR_REPO, VENDOR_BRANCH, VENDOR_CREDENTIALS_ID, NODE, SETUP_LABEL, BUILD_IDENTIFIER, ghprbGhRepository, ghprbActualCommit, GITHUB_SERVER, EXTRA_GETSOURCE_OPTIONS, EXTRA_CONFIGURE_OPTIONS, EXTRA_MAKE_OPTIONS, OPENJDK_CLONE_DIR, CUSTOM_DESCRIPTION, ghprbPullId, ghprbCommentBody, ghprbTargetBranch, ARCHIVE_JAVADOC) {
     stage ("${BUILD_JOB_NAME}") {
-        SCM_BRANCH = (ghprbPullId && ghprbGhRepository == GHPRB_REPO_OPENJ9) ? "origin/pr/${ghprbPullId}/merge" : 'refs/heads/master'
+        SCM_BRANCH = (ghprbPullId && ghprbGhRepository == GHPRB_REPO_OPENJ9) ? "origin/pr/${ghprbPullId}/merge" : 'refs/heads/testArchiveDoc'
         SCM_REFSPEC = (ghprbPullId && ghprbGhRepository == GHPRB_REPO_OPENJ9) ? "+refs/pull/${ghprbPullId}/merge:refs/remotes/origin/pr/${ghprbPullId}/merge" : ''
         return build_with_slack(BUILD_JOB_NAME, ghprbGhRepository, ghprbActualCommit, GITHUB_SERVER,
             [string(name: 'OPENJDK_REPO', value: OPENJDK_REPO),

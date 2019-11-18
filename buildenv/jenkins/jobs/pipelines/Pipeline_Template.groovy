@@ -27,8 +27,8 @@ if (!binding.hasVariable('VENDOR_REPO_DEFAULT')) VENDOR_REPO_DEFAULT = ''
 if (!binding.hasVariable('VENDOR_BRANCH_DEFAULT')) VENDOR_BRANCH_DEFAULT = ''
 if (!binding.hasVariable('VENDOR_CREDENTIALS_ID_DEFAULT')) VENDOR_CREDENTIALS_ID_DEFAULT = ''
 if (!binding.hasVariable('DISCARDER_NUM_BUILDS')) DISCARDER_NUM_BUILDS = '1'
-if (!binding.hasVariable('SCM_URL')) SCM_URL = 'https://github.com/eclipse/openj9.git'
-if (!binding.hasVariable('SCM_BRANCH')) SCM_BRANCH = 'refs/heads/master'
+if (!binding.hasVariable('SCM_URL')) SCM_URL = 'https://github.com/JennyChenyj/openj9.git'
+if (!binding.hasVariable('SCM_BRANCH')) SCM_BRANCH = 'refs/heads/testArchiveDoc'
 if (!binding.hasVariable('SCM_REFSPEC')) SCM_REFSPEC = 'refs/heads/*:refs/remotes/origin/*'
 
 if (jobType == 'build') {
